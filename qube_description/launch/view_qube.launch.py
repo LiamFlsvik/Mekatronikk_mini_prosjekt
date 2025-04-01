@@ -54,7 +54,7 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument(
             name='gui',
             default_value='True',
-            description='Joint state publisher GUI'
+            description='GUI to change angle'
         ),
         launch.actions.DeclareLaunchArgument(
             name='model',

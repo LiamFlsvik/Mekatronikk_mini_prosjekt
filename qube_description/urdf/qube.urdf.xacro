@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot name="qube_model" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-
     <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
 
     <link name="world"/>
