@@ -1,11 +1,10 @@
-
 #include <rclcpp/rclcpp.hpp>
 #include <chrono>
 #include <functional>
 
-class pidController{
+class pid_controller{
     public:
-    pidController(double kp_, double ki_, double kd_): kp(kp_), ki(ki_), kd(kd_), i(0), last_time(std::chrono::steady_clock::now()) {
+    pid_controller(double kp_, double ki_, double kd_): kp(kp_), ki(ki_), kd(kd_), i(0), last_time(std::chrono::steady_clock::now()) {
         pid_update = [this](double reference, double measured_angle) -> double {
             
             auto current_time = std::chrono::steady_clock::now();
