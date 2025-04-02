@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-    <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
-    <xacro:include filename="$(find qube_controller)/urdf/qube_driver_ros2_control.macro.xacro"/>
-
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    
-</robot>

@@ -1,16 +1,23 @@
 <?xml version="1.0"?>
-<robot name="qube" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="qube_model" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
+    <xacro:include filename="$(find qube_driver)/ros2_control/qube_driver.ros2_control.xacro"/>
 
     <link name="world"/>
 
     <xacro:qube prefix="qube_" base_x="0" base_y="0" base_z="0"/>
-    
+
     <joint name="world_to_base" type="fixed">
         <parent link="world"/>
         <child link="qube_base_link"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
+
+
+    <xacro:qube_driver_ros2_control name="qube_" prefix="qube_" baud_rate="115200" device="/dev/ttyACM0" simulation="false"/>
     
+
+
+
 </robot>

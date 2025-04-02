@@ -2,34 +2,29 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   
-  <material name = "black">
-    <color rgba="0 0 0 1"/>
-  </material>
-  <material name = "red">
-    <color rgba="1 0 0 1"/>
-  </material>
-  <material name = "white">
-    <color rgba="1 1 1 1"/>
-  </material>
+ 
 
-	<xacro:macro name="qube_model" params="prefix base_x base_y base_z">
+	<xacro:macro name="qube" params="prefix base_x base_y base_z">
 		<xacro:property name="box_width" value="0.102"/>
 		<xacro:property name="angle_link_length" value="0.025"/>
 		<xacro:property name="angle_link_width" value="0.002"/>
-    <xacro:property name="angle_limit" value="3.14"/> 
     <xacro:property name="rotor_radius" value="0.025"/> 
     <xacro:property name="rotor_length" value="0.01"/>
-      
+    
+    <material name = "black">
+      <color rgba="0 0 0 1"/>
+    </material>
+    <material name = "red">
+      <color rgba="1 0 0 1"/>
+    </material>
+    <material name = "white">
+      <color rgba="1 1 1 1"/>
+    </material>
 
 
 
-    <link name="${prefix}base_link"/>
-
-    <joint name="${prefix}base_joint" type="fixed">
-        <parent link="world"/>
-        <child link="${prefix}base_link"/>
-        <origin xyz="${base_x} ${base_y} ${base_z}" rpy="0 0 0"/>
-    </joint>
+    <link name="${prefix}base_link">
+    </link>
 
 
 		<link name="${prefix}stator_link">
@@ -59,10 +54,9 @@
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="white"/>
-      </visual> 
-    </link>
+      </visual>
 
-    
+    </link>
 
     <joint name="${prefix}stator_joint" type="fixed">
       <parent link="${prefix}base_link"/>
@@ -70,7 +64,7 @@
       <origin xyz="0 0 ${box_width/2}" rpy="0 0 0"/>
     </joint>
 
-    <joint name="${prefix}angle_joint" type="revolute">
+    <joint name="${prefix}motor_joint" type="revolute">
       <parent link="${prefix}stator_link"/>
       <child link="${prefix}rotor_link"/>
       <origin xyz="0 0 ${box_width/2}" rpy="0 0 0"/>
