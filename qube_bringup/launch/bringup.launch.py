@@ -5,23 +5,22 @@ from launch_ros.actions import Node
 from launch.actions import TimerAction
 import os
 from ament_index_python.packages import get_package_share_directory
-from time import sleep
+
 def generate_launch_description():
-    # Argumenter
+    
     device_arg = DeclareLaunchArgument("device", default_value="/dev/ttyACM0")
     baud_rate_arg = DeclareLaunchArgument("baud_rate", default_value="115200")
     simulation_arg = DeclareLaunchArgument("simulation", default_value="false")
 
-    # Konfigurasjoner
+    
     device = LaunchConfiguration("device")
     baud_rate = LaunchConfiguration("baud_rate")
     simulation = LaunchConfiguration("simulation")
 
-    # Sti til URDF
+
     qube_bringup_dir = get_package_share_directory("qube_bringup")
     urdf_file = os.path.join(qube_bringup_dir, "urdf", "controlled_qube.urdf.xacro")
 
-    # Dynamisk URDF med xacro-kommando
     robot_description = Command([
         "xacro ", urdf_file,
         " device:=", device,
@@ -37,6 +36,15 @@ def generate_launch_description():
         output="screen",
         parameters=[{"robot_description": robot_description}]
     )
+
+    joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+        name="joint_state_publisher",
+        output="screen",
+        parameters= [{"robot_description": robot_description}]
+    )
+
 
     ros2_control_node = Node(
         package="controller_manager",
@@ -71,23 +79,10 @@ def generate_launch_description():
         device_arg,
         baud_rate_arg,
         simulation_arg,
-
+        joint_state_publisher_node,
         robot_state_publisher_node,
-
-        TimerAction(
-            period=2.0,
-            actions=[ros2_control_node]
-        ),
-
-        TimerAction(
-            period=3.0,
-            actions=[controller_broadcaster_joint]
-        ),
-
-        TimerAction(
-            period=4.0,
-            actions=[velocity_controller_node]
-        ),
-
+        ros2_control_node,  
+        controller_broadcaster_joint,   
+        velocity_controller_node,
         rviz_node,
     ])
