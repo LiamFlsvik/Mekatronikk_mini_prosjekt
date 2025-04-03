@@ -2,6 +2,8 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.conditions import IfCondition
+from launch.conditions import UnlessCondition
 
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile
@@ -55,7 +57,8 @@ def generate_launch_description():
             {"robot_description": robot_description},
             ParameterFile(controllers_yaml, allow_substs=True)
         ],
-        output="screen"
+        output="screen",
+        condition=UnlessCondition(simulation)
     )
 
     
@@ -74,6 +77,14 @@ def generate_launch_description():
         output="screen"
     )
 
+    simulation_node = Node(
+        package="qube_controller_node",
+        executable="qube_simulator_node",
+        output="screen",
+        condition = IfCondition(simulation)
+    )
+
+    
     return LaunchDescription([
         device_arg,
         baud_rate_arg,
@@ -83,4 +94,5 @@ def generate_launch_description():
         ros2_control_node,
         joint_state_broadcaster,
         velocity_controller,
+        simulation_node
     ])

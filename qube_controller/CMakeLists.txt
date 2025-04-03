@@ -20,10 +20,15 @@ include_directories(include)
 include_directories(launch)
 
 add_executable(qube_controller_node src/main.cpp include/pid_controller.hpp include/qube_controller_node.hpp)
-ament_target_dependencies(qube_controller_node rclcpp std_msgs sensor_msgs pid_controller_msgs )
+ament_target_dependencies(qube_controller_node rclcpp std_msgs sensor_msgs )
+
+add_executable(qube_simulator_node src/main.cpp include/qube_simulator.hpp include/qube_simulator_node.hpp)
+ament_target_dependencies(qube_simulator_node rclcpp std_msgs sensor_msgs)
+
 
 install(TARGETS
 qube_controller_node
+qube_simulator_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

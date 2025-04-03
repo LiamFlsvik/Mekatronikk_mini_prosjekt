@@ -13,6 +13,9 @@ class pid_controller{
             error = reference-measured_angle;
             double p = kp*error;
             i += ki*error*dt;
+            if(i>i_max){i = i_max;}
+            if( i<-i_max){i = -i_max;}
+
             double d = kd*(error-last_error)/dt;
             filtered_d = alpha*filtered_d + (1-alpha)*d;
             last_error = error;
@@ -54,7 +57,7 @@ class pid_controller{
     
 private:
 double reference{0}, setpoint{0};
-double kp{0}, ki{0}, kd{0}, i{0}, filtered_d{0}, alpha{0.9}, last_error{0}, error{0};
+double kp{0}, ki{0}, kd{0}, i{0}, filtered_d{0}, alpha{0.9}, last_error{0}, error{0}, i_max{10};
 std::function<double(double, double)> pid_update;
 std::chrono::steady_clock::time_point last_time;
 };

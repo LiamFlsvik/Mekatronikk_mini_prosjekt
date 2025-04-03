@@ -11,7 +11,7 @@
 class qube_controller_node : public rclcpp::Node {
 public:
     qube_controller_node() : Node("qube_controller_node"),
-        pid_controller_(0.2, 0.01, 0.01),
+        pid_controller_(4.0, 11.0, 0.00),
         reference_(0.0),
         measured_angle_(0.0),
         measured_velocity_(0.0)    
@@ -24,7 +24,7 @@ public:
             std::bind(&qube_controller_node::jointStateCallback, this, std::placeholders::_1));
 
         timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(2),
+            std::chrono::milliseconds(20),
             std::bind(&qube_controller_node::computeAndPublish, this));
 
         declare_parameter("kp", pid_controller_.get_kp());
@@ -44,18 +44,20 @@ private:
         if(!msg->velocity.empty()){
             measured_velocity_ = msg->velocity[0]; 
         }
+        filtered_velocity = alpha*filtered_velocity + (1-alpha)*measured_velocity_;
+
     }
 
     void computeAndPublish()
     {
-        double control_signal = pid_controller_.update(reference_, measured_velocity_);
+        double control_signal = pid_controller_.update(reference_, filtered_velocity);
 
         std_msgs::msg::Float64MultiArray cmd;
         cmd.data.push_back(control_signal);  
         publisher_->publish(cmd);
 
         RCLCPP_INFO(this->get_logger(), "Reference: %.2f | Measured velocity: %.2f | Output: %.2f",
-                    reference_, measured_velocity_, control_signal);
+                    reference_, filtered_velocity, control_signal);
     }
 
    
@@ -79,5 +81,5 @@ private:
 
     pid_controller pid_controller_;
     double reference_;
-    double measured_angle_, measured_velocity_;
+    double measured_angle_, measured_velocity_, filtered_velocity, alpha{0.9};
 };
