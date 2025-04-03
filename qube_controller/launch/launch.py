@@ -25,8 +25,8 @@ def generate_launch_description():
     }
 
     pid_controller_node = Node(
-        package='pid_control',
-        executable='pid_controller_node',
+        package='qube_controller',
+        executable='qube_controller_node',
         namespace='pid_control',
         name='pid_control',
         parameters=[config, pid_parameters_override]

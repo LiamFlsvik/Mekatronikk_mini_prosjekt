@@ -10,13 +10,10 @@ import xacro
 
 
 def generate_launch_description():
+    robot_description = LaunchConfiguration("robot_description")
+    params = {"robot_description": robot_description}
     pkg_path = get_package_share_directory('qube_description')
-    xacro_model_path = os.path.join(pkg_path, 'urdf/qube.urdf.xacro')
 
-    robot_desc = xacro.process_file(xacro_model_path).toxml()
-
-    params = {'robot_description': robot_desc}
-    
     robot_state_publisher_node = launch_ros.actions.Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -46,7 +43,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         name='rviz2',
-        arguments=['-d', [os.path.join(pkg_path, 'config/qube.rviz')]],
+        arguments=['-d', os.path.join(pkg_path, 'config', 'qube.rviz')],
         output='screen',
     )
     
@@ -55,11 +52,6 @@ def generate_launch_description():
             name='gui',
             default_value='True',
             description='GUI to change angle'
-        ),
-        launch.actions.DeclareLaunchArgument(
-            name='model',
-            default_value=xacro_model_path,
-            description='URDF'
         ),
         robot_state_publisher_node,
         joint_state_publisher_node,

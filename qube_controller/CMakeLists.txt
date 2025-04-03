@@ -19,14 +19,12 @@ find_package(pid_controller_msgs REQUIRED)
 include_directories(include)
 include_directories(launch)
 
-
 add_executable(qube_controller_node src/main.cpp include/pid_controller.hpp include/qube_controller_node.hpp)
 ament_target_dependencies(qube_controller_node rclcpp std_msgs sensor_msgs pid_controller_msgs )
 
 install(TARGETS
 qube_controller_node
   DESTINATION lib/${PROJECT_NAME})
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

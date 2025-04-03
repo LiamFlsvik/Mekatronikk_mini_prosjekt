@@ -10,7 +10,8 @@
 		<xacro:property name="angle_link_width" value="0.002"/>
     <xacro:property name="rotor_radius" value="0.025"/> 
     <xacro:property name="rotor_length" value="0.01"/>
-    
+    <xacro:property name="leg_diameter" value="0.0102"/>
+
     <material name = "black">
       <color rgba="0 0 0 1"/>
     </material>
@@ -19,6 +20,9 @@
     </material>
     <material name = "white">
       <color rgba="1 1 1 1"/>
+    </material>
+    <material name = "blue">
+      <color rgba="0 0 1 1"/>
     </material>
 
 
@@ -36,6 +40,28 @@
         <material name="black"/>
       </visual>
     </link>
+
+
+   <link name ="${prefix}blue_lights_link">
+      <visual>
+        <geometry>
+          <box size="${box_width*1.01} ${box_width*1.01} ${box_width*0.1}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="blue"/>
+      </visual>
+    </link>
+
+    <link name="${prefix}red_stripe_link">
+      <visual>
+        <geometry>
+          <box size="${box_width*1.01} ${box_width*1.01} ${box_width*0.1}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="red"/>
+      </visual>
+    </link>
+
 
     <link name="${prefix}rotor_link">
       <visual>
@@ -55,8 +81,20 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="white"/>
       </visual>
-
     </link>
+
+    <joint name="${prefix}blue_lights_joint" type="fixed">
+      <parent link="${prefix}stator_link"/>
+        <child link="${prefix}blue_lights_link"/>
+      <origin xyz="0 0 ${box_width*0.4}" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="${prefix}red_stripe_joint" type="fixed">
+      <parent link="${prefix}stator_link"/>
+        <child link="${prefix}red_stripe_link"/>
+      <origin xyz="0 0 ${-box_width*0.4}" rpy="0 0 0"/>
+    </joint>
+
 
     <joint name="${prefix}stator_joint" type="fixed">
       <parent link="${prefix}base_link"/>
@@ -68,7 +106,7 @@
       <parent link="${prefix}stator_link"/>
       <child link="${prefix}rotor_link"/>
       <origin xyz="0 0 ${box_width/2}" rpy="0 0 0"/>
-      <axis xyz="0 0 1"/>
+      <axis xyz="0 0 -1"/>
       <limit lower="-3.14" upper="3.14" effort="100.0" velocity="1.0"/>
     </joint>
 

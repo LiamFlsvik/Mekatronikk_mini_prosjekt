@@ -6,16 +6,16 @@
 
     <link name="world"/>
 
-    <xacro:qube prefix="qube_" base_x="0" base_y="0" base_z="0"/>
+    <xacro:qube prefix="" base_x="0" base_y="0" base_z="0"/>
 
     <joint name="world_to_base" type="fixed">
         <parent link="world"/>
-        <child link="qube_base_link"/>
+        <child link="base_link"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
 
-    <xacro:qube_driver_ros2_control name="qube_" prefix="qube_" baud_rate="115200" device="/dev/ttyACM0" simulation="false"/>
+    <xacro:qube_driver_ros2_control name="qube_" prefix="" baud_rate="115200" device="/dev/ttyACM0" simulation="false"/>
     
 
 

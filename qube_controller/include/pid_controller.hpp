@@ -4,9 +4,8 @@
 
 class pid_controller{
     public:
-    pid_controller(double kp_, double ki_, double kd_): kp(kp_), ki(ki_), kd(kd_), i(0), last_time(std::chrono::steady_clock::now()) {
-        pid_update = [this](double reference, double measured_angle) -> double {
-            
+    pid_controller(double kp_, double ki_, double kd_): kp(kp_), ki(ki_), kd(kd_), i(0), last_time(std::chrono::steady_clock::now()) {}  
+    double update(double reference, double measured_angle){
             auto current_time = std::chrono::steady_clock::now();
             double dt = std::chrono::duration<double>(current_time-last_time).count();
             last_time = current_time;
@@ -15,14 +14,10 @@ class pid_controller{
             double p = kp*error;
             i += ki*error*dt;
             double d = kd*(error-last_error)/dt;
+            filtered_d = alpha*filtered_d + (1-alpha)*d;
             last_error = error;
             
-            return p+i+d;
-        };
-    }  
-
-    double update(double reference, double measured_angle){
-        return pid_update(reference, measured_angle);
+            return p+i+filtered_d;
     }
 
     void set_reference(const double reference_){
@@ -59,7 +54,7 @@ class pid_controller{
     
 private:
 double reference{0}, setpoint{0};
-double kp{0}, ki{0}, kd{0}, i{0}, last_error{0}, error{0};
+double kp{0}, ki{0}, kd{0}, i{0}, filtered_d{0}, alpha{0.9}, last_error{0}, error{0};
 std::function<double(double, double)> pid_update;
 std::chrono::steady_clock::time_point last_time;
 };
