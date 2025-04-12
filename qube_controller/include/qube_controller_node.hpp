@@ -11,7 +11,7 @@
 class qube_controller_node : public rclcpp::Node {
 public:
     qube_controller_node() : Node("qube_controller_node"),
-        pid_controller_(4.0, 11.0, 0.00),
+        pid_controller_(1.0, 0.01, 0.00),
         reference_(0.0),
         measured_angle_(0.0),
         measured_velocity_(0.0)    
@@ -38,14 +38,16 @@ public:
 private:
     void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg)
     {
-        if(!msg->position.empty()){
-            measured_angle_ = msg->position[0];
-        }
-        if(!msg->velocity.empty()){
-            measured_velocity_ = msg->velocity[0]; 
-        }
-        filtered_velocity = alpha*filtered_velocity + (1-alpha)*measured_velocity_;
+        if(!msg->name.empty() && msg->name[0] == "motor_joint"){
 
+            if(!msg->position.empty()){
+                measured_angle_ = msg->position[0];
+            }
+            if(!msg->velocity.empty()){
+                measured_velocity_ = msg->velocity[0]; 
+            }
+            filtered_velocity = alpha*filtered_velocity + (1-alpha)*measured_velocity_;
+        }
     }
 
     void computeAndPublish()
