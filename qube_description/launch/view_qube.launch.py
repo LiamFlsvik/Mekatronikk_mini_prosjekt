@@ -1,60 +1,54 @@
-
 import launch
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-from launch_ros.substitutions import FindPackageShare
-from launch.actions import IncludeLaunchDescription
+import launch_ros.actions
 from ament_index_python.packages import get_package_share_directory
-import launch_ros
-import os
 import xacro
-
+import os
 
 def generate_launch_description():
-    robot_description = LaunchConfiguration("robot_description")
-    params = {"robot_description": robot_description}
-    pkg_path = get_package_share_directory('qube_description')
-
-    robot_state_publisher_node = launch_ros.actions.Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='screen',
-        parameters=[params] 
+    gui_arg = DeclareLaunchArgument(
+        name="gui",
+        default_value="True",
+        description="Enable joint_state_publisher_gui"
     )
 
-    joint_state_publisher_node = launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        parameters=[params],
-        condition=launch.conditions.UnlessCondition(LaunchConfiguration('gui'))
-    )
+    pkg_path = get_package_share_directory("qube_description")
+    xacro_file = os.path.join(pkg_path, "urdf", "qube.urdf.xacro")
     
-    joint_state_publisher_gui_node = launch_ros.actions.Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        parameters=[params],
-        condition=launch.conditions.IfCondition(LaunchConfiguration('gui'))
-    )
-    
+    # Process the xacro
+    robot_description_config = xacro.process_file(xacro_file).toxml()
+    params = {"robot_description": robot_description_config}
 
-    rviz_node = launch_ros.actions.Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        arguments=['-d', os.path.join(pkg_path, 'config', 'qube.rviz')],
-        output='screen',
-    )
-    
     return launch.LaunchDescription([
-        launch.actions.DeclareLaunchArgument(
-            name='gui',
-            default_value='True',
-            description='GUI to change angle'
+        gui_arg,
+
+        launch_ros.actions.Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            output="screen",
+            parameters=[params]
         ),
-        robot_state_publisher_node,
-        joint_state_publisher_node,
-        joint_state_publisher_gui_node,
-        rviz_node,
+
+        launch_ros.actions.Node(
+            package="joint_state_publisher",
+            executable="joint_state_publisher",
+            condition=launch.conditions.UnlessCondition(LaunchConfiguration("gui")),
+            parameters=[params]
+        ),
+
+        launch_ros.actions.Node(
+            package="joint_state_publisher_gui",
+            executable="joint_state_publisher_gui",
+            condition=launch.conditions.IfCondition(LaunchConfiguration("gui")),
+            parameters=[params]
+        ),
+
+        launch_ros.actions.Node(
+            package="rviz2",
+            executable="rviz2",
+            name="rviz2",
+            arguments=["-d", os.path.join(pkg_path, "config", "qube.rviz")],
+            output="screen",
+        ),
     ])

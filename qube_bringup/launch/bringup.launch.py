@@ -7,25 +7,26 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-import os
-from ament_index_python.packages import get_package_share_directory
-
 def generate_launch_description():
-    # Declare arguments
-    device_arg = DeclareLaunchArgument("device", default_value="/dev/ttyACM0")
-    baud_rate_arg = DeclareLaunchArgument("baud_rate", default_value="115200")
-    simulation_arg = DeclareLaunchArgument("simulation", default_value="false")
-    gui_arg = DeclareLaunchArgument("gui", default_value="false")
+    # Declare launch arguments
+    declare_device = DeclareLaunchArgument("device", default_value="/dev/ttyACM0")
+    declare_baud = DeclareLaunchArgument("baud_rate", default_value="115200")
+    declare_sim = DeclareLaunchArgument("simulation", default_value="false")
+    declare_gui = DeclareLaunchArgument("gui", default_value="false")
 
+    # Substitutions
     device = LaunchConfiguration("device")
     baud_rate = LaunchConfiguration("baud_rate")
     simulation = LaunchConfiguration("simulation")
     gui = LaunchConfiguration("gui")
 
-    # Robot Description
-    urdf_file = os.path.join(
-        get_package_share_directory("qube_bringup"), "urdf", "controlled_qube.urdf.xacro"
-    )
+    # Generate robot_description from xacro
+    urdf_file = PathJoinSubstitution([
+        FindPackageShare("qube_bringup"),
+        "urdf",
+        "controlled_qube.urdf.xacro"
+    ])
+
     robot_description = Command([
         "xacro ", urdf_file,
         " device:=", device,
@@ -33,38 +34,60 @@ def generate_launch_description():
         " simulation:=", simulation
     ])
 
-    # Include RViz + robot_state_publisher
-    view_qube_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("qube_description"),
-                "launch",
-                "view_qube.launch.py"
-            ])
-        ]),
-        launch_arguments={
-            "gui": gui,
-            "robot_description": robot_description
-        }.items()
+    robot_description_param = {"robot_description": robot_description}
+
+    # Robot State Publisher
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        parameters=[robot_description_param],
+        output="screen"
     )
 
-    # Include the qube_driver launch (which handles ros2_control + controllers)
+    # Joint State Publisher (standard and GUI)
+    joint_state_publisher = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+        condition=UnlessCondition(gui),
+        parameters=[robot_description_param]
+    )
+
+    joint_state_publisher_gui = Node(
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        condition=IfCondition(gui),
+        parameters=[robot_description_param]
+    )
+
+    # RViz
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        arguments=["-d", PathJoinSubstitution([
+            FindPackageShare("qube_description"),
+            "config",
+            "qube.rviz"
+        ])],
+        output="screen"
+    )
+
+    # Include qube_driver.launch.py
     qube_driver_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("qube_driver"),
-                "launch",
-                "qube_driver.launch.py"
-            ])
-        ]),
-        
+        PythonLaunchDescriptionSource(PathJoinSubstitution([
+            FindPackageShare("qube_driver"),
+            "launch",
+            "qube_driver.launch.py"
+        ]))
     )
 
     return LaunchDescription([
-        device_arg,
-        baud_rate_arg,
-        simulation_arg,
-        gui_arg,
-        view_qube_launch,
-        qube_driver_launch,
+        declare_device,
+        declare_baud,
+        declare_sim,
+        declare_gui,
+        robot_state_publisher,
+        joint_state_publisher,
+        joint_state_publisher_gui,
+        rviz,
+        qube_driver_launch
     ])
