@@ -29,13 +29,13 @@ Preferably use this to launch service client:
 > ros2 run qube_controller_msgs qube_controller_client_node
 
 Optionally:
-> ros2 param set /qube_controller_node reference <reference>
+> ros2 param set /qube_controller_node reference value
 
 ##### Change regulator gains
-> ros2 param set /qube_controller_node kp <kp>
+> ros2 param set /qube_controller_node kp value
 
-> ros2 param set /qube_controller_node ki <ki>
+> ros2 param set /qube_controller_node ki value
 
-> ros2 param set /qube_controller_node kd <kd>
+> ros2 param set /qube_controller_node kd value
 
 
