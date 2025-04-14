@@ -45,5 +45,6 @@ Integral gain:
 > ros2 param set /qube_controller_node ki value
 Derivative gain:
 > ros2 param set /qube_controller_node kd value
+#Videos (coming soon)
 
 
