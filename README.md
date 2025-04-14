@@ -24,7 +24,7 @@ Furthermore you can connect to the qube or set the simulation argument to true:
 #### Find ACM Port
 > ls /dev | grep ttyACM
 
-## To launch
+## Launching the visualization
 > ros2 launch qube_bringup bringup.launch.py simulation:=<true/false> device:=</dev/ttyACM0> baud_rate:=<115200>
 >
 #### Controller
@@ -38,10 +38,11 @@ Optionally:
 > ros2 param set /qube_controller_node reference value
 
 ##### Change regulator gains
+Proporsional gain:
 > ros2 param set /qube_controller_node kp value
-
+Integral gain:
 > ros2 param set /qube_controller_node ki value
-
+Derivative gain:
 > ros2 param set /qube_controller_node kd value
 
 
