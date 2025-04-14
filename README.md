@@ -2,7 +2,7 @@
 ![image](https://github.com/user-attachments/assets/3586e122-58a5-49c4-9915-2eee1f8963b8)
 
 
-## Build
+## How to setup project
 > mkdir -p project_name/src
 >
 > cd project_name/src
@@ -18,6 +18,8 @@
 > colcon build
 >
 > source install/setup.bash
+
+Furthermore you can connect to the qube or set the simulation argument to true:
 
 #### Find ACM Port
 > ls /dev | grep ttyACM
