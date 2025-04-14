@@ -1,3 +1,7 @@
+# Mechatronics and robotics mini project
+![image](https://github.com/user-attachments/assets/3586e122-58a5-49c4-9915-2eee1f8963b8)
+
+
 ## Build
 > mkdir -p project_name/src
 >
