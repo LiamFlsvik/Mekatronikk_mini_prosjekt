@@ -11,7 +11,7 @@
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-
+  <depend>qube_controller_msgs</depend>
   <exec_depend>rclcpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 

@@ -2,6 +2,8 @@
 #include "std_msgs/msg/float64_multi_array.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
 #include "pid_controller.hpp"
+#include "qube_controller_msgs/srv/set_reference.hpp"
+
 
 
 #include <chrono>
@@ -26,6 +28,10 @@ public:
         timer_ = this->create_wall_timer(
             std::chrono::milliseconds(20),
             std::bind(&qube_controller_node::computeAndPublish, this));
+        service_ = this->create_service<qube_controller_msgs::srv::SetReference>(
+            "set_reference",
+            std::bind(&qube_controller_node::set_reference_callback, this, std::placeholders::_1, std::placeholders::_2)
+        );
 
         declare_parameter("kp", pid_controller_.get_kp());
         declare_parameter("ki", pid_controller_.get_ki());
@@ -36,6 +42,22 @@ public:
             std::bind(&qube_controller_node::parameterCallback, this, std::placeholders::_1));
     }
 private:
+    void set_reference_callback(
+        const std::shared_ptr<qube_controller_msgs::srv::SetReference::Request> request,
+        std::shared_ptr<qube_controller_msgs::srv::SetReference::Response> response) {
+        
+        if (request->request >= -400 && request->request <= 400) {
+            this->reference_ = request->request;
+            response->success = true;
+            RCLCPP_INFO(this->get_logger(), "Reference is set to: %.2f", reference_);
+            pid_controller_.set_reference(request->request);
+        } else {
+            response->success = false;
+            RCLCPP_WARN(this->get_logger(), "Invalid value: %.2f (must be between:-400 and 400)", request->request);
+        }
+        
+    }
+
     void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg)
     {
         if(!msg->name.empty() && msg->name[0] == "motor_joint"){
@@ -83,5 +105,6 @@ private:
 
     pid_controller pid_controller_;
     double reference_;
-    double measured_angle_, measured_velocity_, filtered_velocity, alpha{0.9};
+    double measured_angle_{0}, measured_velocity_{0}, filtered_velocity{0}, alpha{0.5};
+    rclcpp::Service<qube_controller_msgs::srv::SetReference>::SharedPtr service_;
 };

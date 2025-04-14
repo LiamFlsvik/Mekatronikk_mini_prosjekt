@@ -21,8 +21,8 @@ class pid_controller{
             last_error = error;
             
             double pid_output = p+i+filtered_d;
-            if(pid_output>max_voltage){pid_output = max_voltage;}
-            if(pid_output<-max_voltage){pid_output = -max_voltage;}
+            if(pid_output>max_pid){pid_output = max_pid;}
+            if(pid_output<-max_pid){pid_output = -max_pid;}
             return pid_output;
     }
 
@@ -60,7 +60,7 @@ class pid_controller{
     
 private:
 double reference{0}, setpoint{0};
-double kp{0}, ki{0}, kd{0}, i{0}, filtered_d{0}, alpha{0.9}, last_error{0}, error{0}, i_max{10}, max_voltage{16};
+double kp{0}, ki{0}, kd{0}, i{0}, filtered_d{0}, alpha{0.9}, last_error{0}, error{0}, i_max{200}, max_pid{1000};
 std::function<double(double, double)> pid_update;
 std::chrono::steady_clock::time_point last_time;
 };
