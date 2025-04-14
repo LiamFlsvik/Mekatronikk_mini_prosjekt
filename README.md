@@ -25,8 +25,7 @@
 > ros2 launch qube_controller launch.py 
 
 ##### Change desired RPM
-###### Service
-Preferably use this:
+Preferably use this to launch service client:
 > ros2 run qube_controller_msgs qube_controller_client_node
 
 Optionally:
