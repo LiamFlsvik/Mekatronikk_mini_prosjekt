@@ -35,11 +35,11 @@ Furthermore you can connect to the qube or set the simulation argument to true:
 Preferably use this to launch service client:
 > ros2 run qube_controller_msgs qube_controller_client_node
 
-Optionally:
+Or:
 > ros2 param set /qube_controller_node reference value
 
 ##### Change regulator gains
-Proporsional gain:
+Proportional gain:
 > ros2 param set /qube_controller_node kp value
 Integral gain:
 > ros2 param set /qube_controller_node ki value
