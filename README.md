@@ -2,7 +2,7 @@
 
 
 
-<img src="https://github.com/user-attachments/assets/f857117d-12be-47c5-af38-0ed0798d1f75" width="300">
+<img src="https://github.com/user-attachments/assets/f857117d-12be-47c5-af38-0ed0798d1f75" width="450">
 
 
 ## How to setup project
