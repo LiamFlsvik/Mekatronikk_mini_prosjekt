@@ -1,8 +1,9 @@
 # Mechatronics and robotics mini project
 
-<img src="https://github.com/user-attachments/assets/3586e122-58a5-49c4-9915-2eee1f8963b8" width="400"/>
 
-![g](https://github.com/user-attachments/assets/f857117d-12be-47c5-af38-0ed0798d1f75)
+
+<img src="https://github.com/user-attachments/assets/f857117d-12be-47c5-af38-0ed0798d1f75" width="300">
+
 
 ## How to setup project
 > mkdir -p project_name/src
