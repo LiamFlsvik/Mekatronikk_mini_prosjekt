@@ -53,13 +53,12 @@ Derivative gain:
 > 
 > ros2 param set /qube_controller_node kd value
 > 
-#Videos (coming soon)
 
 ## Launch Rviz + GUI
 To view and interact with the qube use the following command:
 > ros2 launch qube_description view_qube.launch.py
 
-## Videoes:
+# Videos (coming soon)
 
 
 
