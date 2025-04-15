@@ -40,11 +40,17 @@ Or:
 
 ##### Change regulator gains
 Proportional gain:
+
 > ros2 param set /qube_controller_node kp value
+> 
 Integral gain:
+> 
 > ros2 param set /qube_controller_node ki value
+> 
 Derivative gain:
+> 
 > ros2 param set /qube_controller_node kd value
+> 
 #Videos (coming soon)
 
 ## Launch Rviz + GUI
