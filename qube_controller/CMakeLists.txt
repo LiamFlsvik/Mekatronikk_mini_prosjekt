@@ -12,8 +12,10 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(qube_controller_msgs)
 
+# Include directories
 include_directories(include)
 include_directories(launch)
+
 
 add_executable(qube_controller_node src/main.cpp include/pid_controller.hpp include/qube_controller_node.hpp)
 ament_target_dependencies(qube_controller_node rclcpp std_msgs sensor_msgs qube_controller_msgs)

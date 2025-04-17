@@ -24,6 +24,13 @@
 
 Furthermore you can connect to the qube or set the simulation argument to true:
 
+### Dependencies
+> sudo apt install ros-jazzy-xacro
+>
+> sudo apt install ros-jazzy-ros2-control
+>
+> sudo apt install ros-jazzy-ros2-controllers
+
 #### Find ACM Port
 > ls /dev | grep ttyACM
 

@@ -3,7 +3,7 @@
 <package format="3">
   <name>qube_bringup</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Qube launch package</description>
   <maintainer email="liam.folsviks@gmail.com">lhf</maintainer>
   <license>TODO: License declaration</license>
 

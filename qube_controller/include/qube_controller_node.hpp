@@ -18,26 +18,30 @@ public:
         measured_angle_(0.0),
         measured_velocity_(0.0)    
     {
+    
+    // Publisher
         publisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
             "/velocity_controller/commands", 10);   
-
+    // Subscriber
         subscriber_ = this->create_subscription<sensor_msgs::msg::JointState>(
             "/joint_states", 10,
             std::bind(&qube_controller_node::jointStateCallback, this, std::placeholders::_1));
-
+    // Timer
         timer_ = this->create_wall_timer(
             std::chrono::milliseconds(20),
             std::bind(&qube_controller_node::computeAndPublish, this));
+    // Service for setting reference 
         service_ = this->create_service<qube_controller_msgs::srv::SetReference>(
             "set_reference",
             std::bind(&qube_controller_node::set_reference_callback, this, std::placeholders::_1, std::placeholders::_2)
         );
-
+    // Declare parameters
         declare_parameter("kp", pid_controller_.get_kp());
         declare_parameter("ki", pid_controller_.get_ki());
         declare_parameter("kd", pid_controller_.get_kd());
         declare_parameter("reference", reference_);
 
+    // Parameter handler, to update the parameters
         parameter_cb_handle_ = this->add_on_set_parameters_callback(
             std::bind(&qube_controller_node::parameterCallback, this, std::placeholders::_1));
     }
@@ -71,7 +75,9 @@ private:
             filtered_velocity = alpha*filtered_velocity + (1-alpha)*measured_velocity_;
         }
     }
-
+// This callback will be called periodically
+// to compute the PID control signal and publish it
+// The PID control signal is computed based on the reference and the measured velocity
     void computeAndPublish()
     {
         double control_signal = pid_controller_.update(reference_, filtered_velocity);
@@ -85,7 +91,11 @@ private:
     }
 
    
-
+// This callback will be called when the parameters are set
+// It will update the PID controller parameters
+    // and the reference value
+    // It returns a SetParametersResult message
+    // indicating whether the parameters were set successfully
     rcl_interfaces::msg::SetParametersResult parameterCallback(const std::vector<rclcpp::Parameter> &params)
     {
         rcl_interfaces::msg::SetParametersResult result;

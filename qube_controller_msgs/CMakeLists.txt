@@ -8,6 +8,7 @@ find_package(rclcpp REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetReference.srv"
 )
+
 include_directories(include)
 
 add_executable(qube_controller_client_node src/main.cpp)
