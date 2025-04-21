@@ -30,8 +30,8 @@ class pid_controller{
             if(pid_output<-max_pid){pid_output = -max_pid;}
             return pid_output;
     }
-    //setters
 
+    //setters
     void set_reference(const double reference_){
         reference = reference_;
     }
@@ -51,7 +51,8 @@ class pid_controller{
         ki = ki_;
         kd = kd_;
     }
-    //getters
+    
+//getters
     double get_kp(){
         return kp;
     }

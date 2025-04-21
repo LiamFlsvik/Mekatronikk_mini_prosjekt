@@ -11,7 +11,7 @@ qube_controller_client(): Node("qube_controller_client") {
     while (!client_->wait_for_service(std::chrono::seconds(1))) {
         RCLCPP_INFO(this->get_logger(), "Waiting for service ");
     }
-   
+   // When the service is available, we can start sending requests
     while(rclcpp::ok()) {
         double reference;
         std::cout << "Enter desired RPM: ";

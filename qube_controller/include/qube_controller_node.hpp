@@ -62,6 +62,10 @@ private:
         
     }
 
+// This callback will be called when a new message is received
+// from the joint state topic
+// It will update the measured angle and velocity
+// and apply a low-pass filter to the measured velocity
     void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr msg)
     {
         if(!msg->name.empty() && msg->name[0] == "motor_joint"){

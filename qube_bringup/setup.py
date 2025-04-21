@@ -2,6 +2,7 @@ from setuptools import find_packages, setup
 import os
 package_name = 'qube_bringup'
 
+
 setup(
     name=package_name,
     version='0.0.0',

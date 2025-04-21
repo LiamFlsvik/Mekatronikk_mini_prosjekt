@@ -26,7 +26,7 @@ def generate_launch_description():
         "urdf",
         "controlled_qube.urdf.xacro"
     ])
-
+    
     robot_description = Command([
         "xacro ", urdf_file,
         " device:=", device,
@@ -79,7 +79,7 @@ def generate_launch_description():
             "qube_driver.launch.py"
         ]))
     )
-
+    
     return LaunchDescription([
         declare_device,
         declare_baud,

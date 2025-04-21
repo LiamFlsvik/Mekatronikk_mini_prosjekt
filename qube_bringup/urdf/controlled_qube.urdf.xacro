@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <robot name="qube_model" xmlns:xacro="http://www.ros.org/wiki/xacro">
-
+    <!--Create launch arguments-->
     <xacro:arg name="baud_rate" default="115200"/>
     <xacro:arg name="device" default="/dev/ttyACM0"/>
     <xacro:arg name="simulation" default="true"/>
 
-
+    <!--Include qube visualization-->
     <xacro:include filename="$(find qube_description)/urdf/qube.macro.xacro"/>
+    <!--Include qube_driver xacro-->
     <xacro:include filename="$(find qube_driver)/ros2_control/qube_driver.ros2_control.xacro"/>
 
+    <!-- World to base link-->
     <link name="world"/>
-
     <xacro:qube prefix="" base_x="0" base_y="0" base_z="0"/>
-
     <joint name="world_to_base" type="fixed">
         <parent link="world"/>
         <child link="base_link"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
-
+    <!--Create instance of qube driver with launch arguments-->
     <xacro:qube_driver_ros2_control name="qube_driver" prefix="" baud_rate="$(arg baud_rate)" device="$(arg device)" simulation="$(arg simulation)"/>
     
 </robot>
