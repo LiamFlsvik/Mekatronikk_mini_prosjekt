@@ -4,6 +4,12 @@
 
 <img src="https://github.com/user-attachments/assets/f857117d-12be-47c5-af38-0ed0798d1f75" width="450">
 
+# Videos
+## Simulation:
+https://www.youtube.com/shorts/pYRfyK4JUBU
+
+## Digital twin:
+https://www.youtube.com/shorts/KYiiaceddT8
 
 ## How to setup project
 > mkdir -p project_name/src
@@ -65,11 +71,6 @@ Derivative gain:
 To view and interact with the qube use the following command:
 > ros2 launch qube_description view_qube.launch.py
 
-# Videos
-## Simulation:
-https://www.youtube.com/shorts/pYRfyK4JUBU
 
-## Digital twin:
-https://www.youtube.com/shorts/KYiiaceddT8
 
 
