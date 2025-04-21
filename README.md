@@ -65,7 +65,11 @@ Derivative gain:
 To view and interact with the qube use the following command:
 > ros2 launch qube_description view_qube.launch.py
 
-# Videos (coming soon)
+# Videos
+## Simulation:
+https://www.youtube.com/shorts/pYRfyK4JUBU
 
+## Digital twin:
+https://www.youtube.com/shorts/KYiiaceddT8
 
 
